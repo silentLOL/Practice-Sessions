@@ -37,6 +37,7 @@ ext {
     butterKnifeVersion = '9.0.0-rc1'
     retrofitVersion = '2.3.0'
     gsonVersion = '2.3.0'
+    guavaVersion = '26.0-android'
     archLifecycleVersion = "1.1.1"
 
     junitVersion = '4.12'

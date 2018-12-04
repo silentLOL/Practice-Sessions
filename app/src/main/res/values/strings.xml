@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Practice Sessions</string>
+    <string name="example_text_date">Today</string>
+    <string name="example_text_session_name">This is a sessions name</string>
 </resources>

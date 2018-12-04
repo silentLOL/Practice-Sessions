@@ -8,6 +8,6 @@ import retrofit2.http.GET;
 
 public interface RequestSessionsService {
 
-    @GET("/sessions.json")
+    @GET("/data/sessions.json")
     Call<List<Session>> getSessions();
 }

@@ -16,6 +16,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -23,6 +31,11 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
 
     implementation "com.android.support.constraint:constraint-layout:$rootProject.constraintLayoutVersion"
+    implementation "com.android.support:design:$rootProject.supportLibraryVersion"
+
+
+    // guava
+    implementation "com.google.guava:guava:$rootProject.guavaVersion"
 
     // timber
     implementation "com.jakewharton.timber:timber:$rootProject.timberVersion"
@@ -42,6 +55,8 @@ dependencies {
     implementation "android.arch.lifecycle:common-java8:$rootProject.archLifecycleVersion"
     // optional - ReactiveStreams support for LiveData
     implementation "android.arch.lifecycle:reactivestreams:$rootProject.archLifecycleVersion"
+    implementation "android.arch.lifecycle:extensions:$rootProject.archLifecycleVersion"
+    annotationProcessor "android.arch.lifecycle:compiler:$rootProject.archLifecycleVersion"
 
     testImplementation "junit:junit:$rootProject.junitVersion"
     androidTestImplementation "junit:junit:$rootProject.junitVersion"
