@@ -26,13 +26,40 @@
             android:text="@{session.getName()}"
             tools:text="@string/example_text_session_name" />
 
-        <TextView
-            android:id="@+id/practiced_on_date_tv"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_left"
             android:layout_marginLeft="@dimen/margin_left"
-            tools:text="@string/example_text_date" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="@string/practiced_on_label_text"
+                android:textSize="12sp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/practiced_on_date_tv"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_left"
+                android:layout_marginLeft="@dimen/margin_left"
+                android:text="@{session.getPracticedOnDateAsString()}"
+                android:textSize="12sp"
+                android:textStyle="italic"
+                tools:text="@string/example_text_date" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/margin_vertical"
+            android:background="@color/colorPrimaryDark" />
 
     </LinearLayout>
 

@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -101,7 +102,7 @@ public class SessionsRepository implements SessionsDataSource {
         if (mCachedSessions != null) {
             mCachedSessions.clear();
         } else {
-            mCachedSessions = new HashMap<>();
+            mCachedSessions = new LinkedHashMap<>();
         }
         cacheSessionsListAsMap(sessions);
         mCacheIsDirty = false;

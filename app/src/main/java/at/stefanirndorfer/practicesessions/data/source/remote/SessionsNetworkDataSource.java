@@ -53,7 +53,7 @@ public class SessionsNetworkDataSource implements SessionsDataSource {
 
             @Override
             public void onFailure(Call<List<Session>> call, Throwable t) {
-                Timber.e("Error calling for recipes: " + t.getMessage());
+                Timber.e("Error calling for sessions: " + t.getMessage());
                 returningData.setValue(Collections.<Session>emptyList());
             }
         });

@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import at.stefanirndorfer.practicesessions.databinding.FragmentSessionsListBinding;
 import at.stefanirndorfer.practicesessions.util.ViewModelFactory;
@@ -33,6 +34,7 @@ public class SessionsFragment extends Fragment {
         mViewModel.start();
         return mBinding.getRoot();
     }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

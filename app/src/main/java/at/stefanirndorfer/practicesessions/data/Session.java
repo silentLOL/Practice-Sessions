@@ -1,14 +1,18 @@
 package at.stefanirndorfer.practicesessions.data;
 
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class Session {
 
+
     private String name;
-    private String practicedOnDate; /* TODO: need a date object in the end */
+    private Date practicedOnDate;
     private List<Exercise> exercises;
 
-    public Session(String name, String practicedOnDate, List<Exercise> exercises) {
+    public Session(String name, Date practicedOnDate, List<Exercise> exercises) {
         this.name = name;
         this.practicedOnDate = practicedOnDate;
         this.exercises = exercises;
@@ -22,11 +26,12 @@ public class Session {
         this.name = name;
     }
 
-    public String getPracticedOnDate() {
-        return practicedOnDate;
+    public String getPracticedOnDateAsString() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        return dateFormat.format(practicedOnDate);
     }
 
-    public void setPracticedOnDate(String practicedOnDate) {
+    public void setPracticedOnDate(Date practicedOnDate) {
         this.practicedOnDate = practicedOnDate;
     }
 

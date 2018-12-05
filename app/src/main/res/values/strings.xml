@@ -2,4 +2,7 @@
     <string name="app_name">Practice Sessions</string>
     <string name="example_text_date">Today</string>
     <string name="example_text_session_name">This is a sessions name</string>
+    <string name="practiced_on_label_text">Practiced on:</string>
+    <string name="no_connection_error_text">No Network available! Establish a connection and retry</string>
+    <string name="retry_bt_text">Retry</string>
 </resources>
