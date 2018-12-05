@@ -2,6 +2,7 @@
 <layout>
 
     <data>
+        <import type="android.view.View" />
         <variable
             name="viewModel"
             type="at.stefanirndorfer.practicesessions.session.SessionsViewModel" />
@@ -12,6 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/loading_sessions_pb"
+            android:visibility="@{viewModel.dataLoading ? View.VISIBLE : View.GONE}"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view_sessions_list_rv"

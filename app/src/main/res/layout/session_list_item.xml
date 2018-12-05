@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="session"
             type="at.stefanirndorfer.practicesessions.data.Session" />
@@ -11,13 +12,17 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_vertical"
+        android:layout_marginBottom="@dimen/margin_vertical"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/session_name_tv"
-            style="@style/Base.TextAppearance.AppCompat.Display2"
+            style="@style/Base.TextAppearance.AppCompat.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_left"
+            android:layout_marginLeft="@dimen/margin_left"
             android:text="@{session.getName()}"
             tools:text="@string/example_text_session_name" />
 
@@ -25,6 +30,8 @@
             android:id="@+id/practiced_on_date_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_left"
+            android:layout_marginLeft="@dimen/margin_left"
             tools:text="@string/example_text_date" />
 
     </LinearLayout>
