@@ -7,6 +7,7 @@ Features:
 * Retrofit is used for remote requests
 
 Possible Improvements:
-* Error handling. Propagation of 
-* Basic network check is implemented but does not actually ping an external ressource to check the connection quality
+* Error handling. Propagation from Repository by providing a Live Data interface for Throwables
+* Basic network check is implemented but does not actually ping an external resource to check the connection quality
 * Localisation! Time and Date format does not consider the phones locale. A SimpleDateFormat is used instead
+* Responsive design
