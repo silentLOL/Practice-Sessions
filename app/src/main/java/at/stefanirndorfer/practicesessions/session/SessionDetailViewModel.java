@@ -14,6 +14,7 @@ import timber.log.Timber;
 public class SessionDetailViewModel extends AndroidViewModel {
     public final ObservableBoolean mDataLoading = new ObservableBoolean(false);
     public final ObservableField<String> mSessionName = new ObservableField<>();
+    public final ObservableField<String> mPracticedOn = new ObservableField<>();
 
     private final SessionsRepository mSessionsRepository;
     private MutableLiveData<Session> mSession = new MutableLiveData<>();
@@ -42,6 +43,7 @@ public class SessionDetailViewModel extends AndroidViewModel {
             if (session != null) {
                 Timber.d("received session from repository. Session name: " + session.getName());
                 mSessionName.set(session.getName());
+                mPracticedOn.set(session.getPracticedOnDateAsString());
                 mSession.setValue(session);
             }
         });
