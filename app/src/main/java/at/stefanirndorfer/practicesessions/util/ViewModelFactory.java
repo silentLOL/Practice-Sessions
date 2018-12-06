@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.VisibleForTesting;
 
 import at.stefanirndorfer.practicesessions.data.source.SessionsRepository;
+import at.stefanirndorfer.practicesessions.session.SessionDetailViewModel;
 import at.stefanirndorfer.practicesessions.session.SessionsViewModel;
 
 /**
@@ -49,6 +50,8 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
         if (modelClass.isAssignableFrom(SessionsViewModel.class)) {
             //noinspection unchecked
             return (T) new SessionsViewModel(mApplication, mSessionsRepository);
+        } else if (modelClass.isAssignableFrom(SessionDetailViewModel.class)){
+            return (T) new SessionDetailViewModel(mApplication, mSessionsRepository);
         }
         throw new IllegalArgumentException("Unknown ViewModel class: " + modelClass.getName());
     }

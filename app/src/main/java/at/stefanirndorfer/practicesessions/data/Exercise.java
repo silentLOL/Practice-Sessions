@@ -1,6 +1,6 @@
 package at.stefanirndorfer.practicesessions.data;
 
-class Exercise {
+public class Exercise {
     private String exerciseId;
     private String name;
     private Integer practicedAtBpm;

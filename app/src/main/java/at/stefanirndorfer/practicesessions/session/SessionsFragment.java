@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import at.stefanirndorfer.practicesessions.databinding.FragmentSessionsListBinding;
+import at.stefanirndorfer.practicesessions.session.adapter.SessionsRecyclerViewAdapter;
 import at.stefanirndorfer.practicesessions.session.input.SessionItemActionListener;
 import at.stefanirndorfer.practicesessions.util.ViewModelFactory;
 import timber.log.Timber;

@@ -1,4 +1,4 @@
-package at.stefanirndorfer.practicesessions.session;
+package at.stefanirndorfer.practicesessions.session.adapter;
 
 import android.arch.lifecycle.Observer;
 import android.support.annotation.NonNull;
@@ -12,6 +12,7 @@ import java.util.List;
 
 import at.stefanirndorfer.practicesessions.data.Session;
 import at.stefanirndorfer.practicesessions.databinding.SessionListItemBinding;
+import at.stefanirndorfer.practicesessions.session.SessionsViewModel;
 import at.stefanirndorfer.practicesessions.session.input.SessionItemActionListener;
 import timber.log.Timber;
 
