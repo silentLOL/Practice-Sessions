@@ -3,29 +3,67 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="exercise"
             type="at.stefanirndorfer.practicesessions.data.Exercise" />
+
+        <variable
+            name="session"
+            type="at.stefanirndorfer.practicesessions.data.Session" />
 
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_vertical"
+        android:layout_marginTop="@dimen/margin_top_16dp"
         android:layout_marginBottom="@dimen/margin_vertical"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/exercise_name_tv"
-            style="@style/Base.TextAppearance.AppCompat.Large"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_left"
-            android:layout_marginLeft="@dimen/margin_left"
-            android:text="@{exercise.getName()}"
-            tools:text="@string/exercise_name_example" />
+        <!-- begin Session name and date -->
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/session_name_tv"
+                style="@style/Base.TextAppearance.AppCompat.Large"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_left"
+                android:layout_marginLeft="@dimen/margin_left"
+                android:text="@{session.getName()}"
+                tools:text="@string/session_name_example" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_left"
+                android:layout_marginLeft="@dimen/margin_left"
+                android:text="@string/practiced_on_label_text"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="12sp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/practiced_on_date_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_left"
+                android:layout_marginLeft="@dimen/margin_left"
+                android:text="@{session.getPracticedOnDateAsString()}"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="12sp"
+                android:textStyle="italic"
+                tools:text="@string/example_text_date" />
+
+        </LinearLayout>
+
+        <!-- end Session name and date -->
+        <!-- begin exercise data -->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,41 +73,38 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/exercise_name_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/exercise_id_label"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="12sp"
-                android:textStyle="italic" />
-
-            <TextView
-                android:id="@+id/exercise_id_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_left"
-                android:layout_marginLeft="@dimen/margin_left"
-                android:text="@{exercise.getExerciseId()}"
-                android:textColor="@color/colorPrimaryDark"
-
-                android:textSize="12sp"
-                android:textStyle="italic"
-                tools:text="@string/example_text_exercise_id" />
+                android:text="@{exercise.getName()}"
+                android:textStyle="bold"
+                tools:text="@string/exercise_name_example" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_vertical_32dp"
                 android:layout_marginLeft="@dimen/margin_vertical_32dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="12sp"
+                android:textStyle="italic"
                 android:text="@string/detected_bpm_text" />
 
             <TextView
                 android:id="@+id/praticed_at_bpm_tv"
-                android:text="@{String.valueOf(exercise.getPracticedAtBpm())}"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="12sp"
+                android:textStyle="italic"
+                android:text="@{String.valueOf(exercise.getPracticedAtBpm())}" />
         </LinearLayout>
+        <!-- end exercise data -->
+
+        <!-- seperateor -->
 
         <View
+            android:id="@+id/bottom_border_v"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="@dimen/margin_vertical"

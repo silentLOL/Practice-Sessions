@@ -7,7 +7,6 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.VisibleForTesting;
 
 import at.stefanirndorfer.practicesessions.data.source.SessionsRepository;
-import at.stefanirndorfer.practicesessions.session.SessionDetailViewModel;
 import at.stefanirndorfer.practicesessions.session.SessionsViewModel;
 
 /**

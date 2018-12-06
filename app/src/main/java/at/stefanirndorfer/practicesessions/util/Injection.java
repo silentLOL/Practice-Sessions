@@ -11,6 +11,6 @@ import at.stefanirndorfer.practicesessions.data.source.remote.SessionsNetworkDat
  */
 class Injection {
     public static SessionsRepository provideTasksRepository() {
-        return SessionsRepository.getInstance(SessionsNetworkDataSource.getInstance());
+        return SessionsRepository.getInstance(SessionsNetworkDataSource.getInstance(), new AppExecutors());
     }
 }

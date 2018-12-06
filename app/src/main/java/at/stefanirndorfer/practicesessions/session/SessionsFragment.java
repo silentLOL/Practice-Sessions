@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 
 import at.stefanirndorfer.practicesessions.databinding.FragmentSessionsListBinding;
 import at.stefanirndorfer.practicesessions.session.adapter.SessionsRecyclerViewAdapter;
-import at.stefanirndorfer.practicesessions.session.input.SessionItemActionListener;
 import at.stefanirndorfer.practicesessions.util.ViewModelFactory;
 import timber.log.Timber;
 
@@ -26,7 +25,6 @@ public class SessionsFragment extends Fragment {
     private RecyclerView mRecyclerViewSessions;
     private LinearLayoutManager mLayoutManager;
     private SessionsRecyclerViewAdapter mAdapter;
-    private SessionItemActionListener mListener;
 
     @Nullable
     @Override
@@ -40,16 +38,6 @@ public class SessionsFragment extends Fragment {
         return mBinding.getRoot();
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            mListener = (SessionItemActionListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement SessionItemActionListener");
-        }
-    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -64,7 +52,7 @@ public class SessionsFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(this.getActivity());
         mRecyclerViewSessions.setLayoutManager(mLayoutManager);
         mRecyclerViewSessions.setHasFixedSize(true);
-        mAdapter = new SessionsRecyclerViewAdapter(mViewModel, mListener);
+        mAdapter = new SessionsRecyclerViewAdapter(mViewModel);
         mRecyclerViewSessions.setAdapter(mAdapter);
     }
 

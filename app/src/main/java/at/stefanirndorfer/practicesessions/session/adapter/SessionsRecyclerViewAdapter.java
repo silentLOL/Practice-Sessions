@@ -13,7 +13,6 @@ import java.util.List;
 import at.stefanirndorfer.practicesessions.data.Session;
 import at.stefanirndorfer.practicesessions.databinding.SessionListItemBinding;
 import at.stefanirndorfer.practicesessions.session.SessionsViewModel;
-import at.stefanirndorfer.practicesessions.session.input.SessionItemActionListener;
 import timber.log.Timber;
 
 public class SessionsRecyclerViewAdapter extends RecyclerView.Adapter<SessionsRecyclerViewAdapter.SessionsViewHolder> {
@@ -21,11 +20,9 @@ public class SessionsRecyclerViewAdapter extends RecyclerView.Adapter<SessionsRe
 
     private final SessionsViewModel mViewModel;
     private List<Session> mSessions;
-    private final SessionItemActionListener mListener;
 
-    public SessionsRecyclerViewAdapter(SessionsViewModel viewModel, SessionItemActionListener listener) {
+    public SessionsRecyclerViewAdapter(SessionsViewModel viewModel) {
         this.mViewModel = viewModel;
-        mListener = listener;
         mSessions = new ArrayList<>();
         subscribeOnSessionData();
     }
@@ -55,8 +52,6 @@ public class SessionsRecyclerViewAdapter extends RecyclerView.Adapter<SessionsRe
         binding = SessionListItemBinding.inflate(inflater, viewGroup, false);
         binding.sessionNameTv.setText(mSessions.get(i).getName());
 
-        SessionItemActionListener userActionListener = mListener::onSessionItemClicked;
-        binding.setListener(userActionListener);
         return new SessionsViewHolder(binding);
     }
 

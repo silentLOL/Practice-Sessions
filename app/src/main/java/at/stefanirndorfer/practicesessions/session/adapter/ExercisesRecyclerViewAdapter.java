@@ -10,7 +10,6 @@ import java.util.List;
 
 import at.stefanirndorfer.practicesessions.data.Exercise;
 import at.stefanirndorfer.practicesessions.databinding.ExerciseListItemBinding;
-import at.stefanirndorfer.practicesessions.session.SessionDetailViewModel;
 import timber.log.Timber;
 
 public class ExercisesRecyclerViewAdapter extends RecyclerView.Adapter<ExercisesRecyclerViewAdapter.ExercisesViewHolder> {

@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import at.stefanirndorfer.practicesessions.data.Session;
+import at.stefanirndorfer.practicesessions.data.SessionRelatedExercise;
 import at.stefanirndorfer.practicesessions.data.source.SessionsDataSource;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -62,11 +63,22 @@ public class SessionsNetworkDataSource implements SessionsDataSource {
 
     /**
      * intentionally left empty
+     *
      * @param id
      * @return
      */
     @Override
     public MutableLiveData<Session> getSessionById(int id) {
+        return null;
+    }
+
+    /**
+     * intentionally left empty
+     *
+     * @return
+     */
+    @Override
+    public MutableLiveData<List<SessionRelatedExercise>> getSortedExercises() {
         return null;
     }
 

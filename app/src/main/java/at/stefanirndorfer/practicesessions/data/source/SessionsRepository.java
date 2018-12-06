@@ -1,14 +1,19 @@
 package at.stefanirndorfer.practicesessions.data.source;
 
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Observer;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import at.stefanirndorfer.practicesessions.data.Session;
+import at.stefanirndorfer.practicesessions.data.SessionRelatedExercise;
+import at.stefanirndorfer.practicesessions.util.AppExecutors;
 import timber.log.Timber;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -22,6 +27,7 @@ public class SessionsRepository implements SessionsDataSource {
 
     private volatile static SessionsRepository INSTANCE = null;
     private final SessionsDataSource mRemoteSessionsDataSource;
+    private final AppExecutors mExecutors;
     private Object lock = new Object();
 
     private Map<Integer, Session> mCachedSessions;
@@ -34,8 +40,9 @@ public class SessionsRepository implements SessionsDataSource {
 
 
     //private constructor to prevent direct instantiation
-    private SessionsRepository(@NonNull SessionsDataSource remoteSessionsDataSource) {
+    private SessionsRepository(@NonNull SessionsDataSource remoteSessionsDataSource, AppExecutors executors) {
         mRemoteSessionsDataSource = checkNotNull(remoteSessionsDataSource); /* lets fail hard in case its null */
+        mExecutors = executors;
     }
 
     /**
@@ -44,11 +51,11 @@ public class SessionsRepository implements SessionsDataSource {
      * @param remoteSessionsDataSource the remote data source
      * @return the {@link SessionsRepository} instance
      */
-    public static SessionsRepository getInstance(SessionsDataSource remoteSessionsDataSource) {
+    public static SessionsRepository getInstance(SessionsDataSource remoteSessionsDataSource, AppExecutors executors) {
         if (INSTANCE == null) {
             synchronized (SessionsRepository.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = new SessionsRepository(remoteSessionsDataSource);
+                    INSTANCE = new SessionsRepository(remoteSessionsDataSource, executors);
                 }
             }
         }
@@ -56,7 +63,7 @@ public class SessionsRepository implements SessionsDataSource {
     }
 
     /**
-     * Used to force {@link #getInstance(SessionsDataSource)} to create a new instance
+     * Used to force {@link #getInstance(SessionsDataSource, AppExecutors)} to create a new instance
      * next time it's called.
      */
     public static void destroyInstance() {
@@ -99,9 +106,39 @@ public class SessionsRepository implements SessionsDataSource {
         return returningData;
     }
 
-    //----------------------------------------------//
-    // end data requests
-    //----------------------------------------------//
+    @Override
+    public MutableLiveData<List<SessionRelatedExercise>> getSortedExercises() {
+        MutableLiveData<List<SessionRelatedExercise>> returningData = new MutableLiveData<>();
+        if (mCachedSessions == null || mCachedSessions.isEmpty()) {
+            // we need to do our network request first
+           getSessions().observeForever(new Observer<List<Session>>() {
+               @Override
+               public void onChanged(@Nullable List<Session> sessions) {
+                   if (sessions != null && !sessions.isEmpty()){
+                       generateSortesExerciseList(returningData);
+                   }
+               }
+           });
+        } else {
+            generateSortesExerciseList(returningData);
+        }
+        return returningData;
+    }
+
+    private void generateSortesExerciseList(MutableLiveData<List<SessionRelatedExercise>> returningData) {
+        //lets do it on a background thread
+        mExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                List<Session> sessions = new ArrayList<>();
+                for (Map.Entry<Integer, Session> currElement :
+                        mCachedSessions) {
+
+                }
+            }
+        });
+    }
+
 
     /**
      * uses the remote data source to request the
@@ -116,6 +153,11 @@ public class SessionsRepository implements SessionsDataSource {
             }
         });
     }
+
+    //----------------------------------------------//
+    // end data requests
+    //----------------------------------------------//
+
 
     /**
      * adding a client sided unique identifier to be not related on Strings as ids
@@ -144,7 +186,7 @@ public class SessionsRepository implements SessionsDataSource {
             if (mCachedSessions != null) {
                 mCachedSessions.clear();
             } else {
-                mCachedSessions = new LinkedHashMap<>();
+                mCachedSessions = new HashMap<>();
             }
             cacheSessionsListAsMap(sessions);
             mCacheIsDirty = false;
