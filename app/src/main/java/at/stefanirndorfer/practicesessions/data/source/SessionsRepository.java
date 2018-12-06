@@ -6,11 +6,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import at.stefanirndorfer.practicesessions.data.Exercise;
 import at.stefanirndorfer.practicesessions.data.Session;
 import at.stefanirndorfer.practicesessions.data.SessionRelatedExercise;
 import at.stefanirndorfer.practicesessions.util.AppExecutors;
@@ -111,32 +112,53 @@ public class SessionsRepository implements SessionsDataSource {
         MutableLiveData<List<SessionRelatedExercise>> returningData = new MutableLiveData<>();
         if (mCachedSessions == null || mCachedSessions.isEmpty()) {
             // we need to do our network request first
-           getSessions().observeForever(new Observer<List<Session>>() {
-               @Override
-               public void onChanged(@Nullable List<Session> sessions) {
-                   if (sessions != null && !sessions.isEmpty()){
-                       generateSortesExerciseList(returningData);
-                   }
-               }
-           });
+            getSessions().observeForever(new Observer<List<Session>>() {
+                @Override
+                public void onChanged(@Nullable List<Session> sessions) {
+                    if (sessions != null && !sessions.isEmpty()) {
+                        generateSortedExerciseList(returningData);
+                    }
+                }
+            });
         } else {
-            generateSortesExerciseList(returningData);
+            generateSortedExerciseList(returningData);
         }
         return returningData;
     }
 
-    private void generateSortesExerciseList(MutableLiveData<List<SessionRelatedExercise>> returningData) {
+    private void generateSortedExerciseList(MutableLiveData<List<SessionRelatedExercise>> returningData) {
         //lets do it on a background thread
-        mExecutors.diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                List<Session> sessions = new ArrayList<>();
-                for (Map.Entry<Integer, Session> currElement :
-                        mCachedSessions) {
-
-                }
+        mExecutors.diskIO().execute(() -> {
+            List<Session> sessions = new ArrayList<>();
+            for (Session currElement : mCachedSessions.values()) {
+                sessions.add(currElement);
             }
+            sessions = sortSessionByPracticeDate(sessions);
+            List<SessionRelatedExercise> sessionRelatedExercises = convertSessionsToSessionRelatedExercises(sessions);
+            returningData.postValue(sessionRelatedExercises); /* use post value since we are not on the main thread */
         });
+    }
+
+    private List<SessionRelatedExercise> convertSessionsToSessionRelatedExercises(List<Session> sessions) {
+        List<SessionRelatedExercise> exercises = new ArrayList<>();
+        for (Session currSession : sessions) {
+            List<Exercise> oldExercises = currSession.getExercises();
+            for (int i = 0; i < oldExercises.size(); i++) {
+                SessionRelatedExercise sessionRelatedExercise = new SessionRelatedExercise.Builder()
+                        .setExercise(oldExercises.get(i))
+                        .setSessionName(currSession.getName())
+                        .setIsEarlies(i == oldExercises.size() - 1)
+                        .setIsLatest(i == 0)
+                        .build();
+                exercises.add(sessionRelatedExercise);
+            }
+        }
+        return exercises;
+    }
+
+    private List<Session> sortSessionByPracticeDate(List<Session> sessions) {
+        Collections.sort(sessions, (o1, o2) -> o1.getPracticedOnDate().compareTo(o2.getPracticedOnDate()));
+        return sessions;
     }
 
 

@@ -32,6 +32,10 @@ public class Session {
         return dateFormat.format(practicedOnDate);
     }
 
+    public Date getPracticedOnDate() {
+        return practicedOnDate;
+    }
+
     public void setPracticedOnDate(Date practicedOnDate) {
         this.practicedOnDate = practicedOnDate;
     }
