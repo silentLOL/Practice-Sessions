@@ -49,13 +49,10 @@ public class SessionsViewModel extends AndroidViewModel {
         if (showLoadingUI) {
             mDataLoading.set(true);
         }
-        mSessionsRepository.getSessions().observeForever(new Observer<List<Session>>() {
-            @Override
-            public void onChanged(@Nullable List<Session> sessions) {
-                Timber.d("received " + sessions.size() + " sessions from repository");
-                mSessions.setValue(sessions);
-                mDataLoading.set(false);
-            }
+        mSessionsRepository.getSessions().observeForever(sessions -> {
+            Timber.d("received " + sessions.size() + " sessions from repository");
+            mSessions.setValue(sessions);
+            mDataLoading.set(false);
         });
     }
 

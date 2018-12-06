@@ -12,34 +12,37 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import at.stefanirndorfer.practicesessions.R;
-import at.stefanirndorfer.practicesessions.databinding.FragmentSessionsListBinding;
+import java.util.Objects;
+
+import at.stefanirndorfer.practicesessions.databinding.FragmentSessionDetailBinding;
+import at.stefanirndorfer.practicesessions.session.adapter.ExercisesRecyclerViewAdapter;
 import at.stefanirndorfer.practicesessions.util.ViewModelFactory;
 import timber.log.Timber;
 
 public class SessionDetailFragment extends Fragment {
 
-    private static final String SESSION_NAME_KEY = "session_name";
+    private static final String SESSION_ID_KEY = "session_id";
+    private static final int DEFAULT_SESSION_ID = 0;
 
     private RecyclerView mRecyclerViewExercises;
     private LinearLayoutManager mLayoutManager;
     private ExercisesRecyclerViewAdapter mAdapter;
-    FragmentSessionsListBinding mBinding;
+    FragmentSessionDetailBinding mBinding;
     private SessionDetailViewModel mViewModel;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mBinding = FragmentSessionsListBinding.inflate(inflater, container, false);
+        mBinding = FragmentSessionDetailBinding.inflate(inflater, container, false);
         Timber.d("onCreateView");
-        mViewModel = obtainViewModel((SessionActivity) this.getActivity());
+        mViewModel = obtainViewModel((SessionActivity) Objects.requireNonNull(this.getActivity()));
         mBinding.setViewModel(mViewModel);
 
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(((AppCompatActivity) getActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         assert getArguments() != null;
-        String sessionName = getArguments().getString(SESSION_NAME_KEY, getResources().getString(R.string.default_session_name_value));
-        mViewModel.start(sessionName);
+        int sessionId = getArguments().getInt(SESSION_ID_KEY, DEFAULT_SESSION_ID);
+        mViewModel.start(sessionId);
         return mBinding.getRoot();
     }
 
@@ -51,8 +54,8 @@ public class SessionDetailFragment extends Fragment {
     }
 
     private void setupRecyclerViewAdapter() {
-        Timber.d("Setting up sessions recyclerView");
-        mRecyclerViewExercises = mBinding.recyclerViewExercisesListRv;
+        Timber.d("Setting up exercise recyclerView");
+        mRecyclerViewExercises = mBinding.recyclerViewExerciseRv;
         mLayoutManager = new LinearLayoutManager(this.getActivity());
         mRecyclerViewExercises.setLayoutManager(mLayoutManager);
         mRecyclerViewExercises.setHasFixedSize(true);
@@ -61,10 +64,10 @@ public class SessionDetailFragment extends Fragment {
     }
 
 
-    public static SessionDetailFragment newInstance(String sessionName) {
+    public static SessionDetailFragment newInstance(int sessionId) {
         SessionDetailFragment sessionDetailFragment = new SessionDetailFragment();
         Bundle args = new Bundle();
-        args.putString(SESSION_NAME_KEY, sessionName);
+        args.putInt(SESSION_ID_KEY, sessionId);
         sessionDetailFragment.setArguments(args);
         return sessionDetailFragment;
     }

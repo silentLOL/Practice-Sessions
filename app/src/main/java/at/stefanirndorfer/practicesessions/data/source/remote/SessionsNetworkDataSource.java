@@ -59,4 +59,15 @@ public class SessionsNetworkDataSource implements SessionsDataSource {
         });
         return returningData;
     }
+
+    /**
+     * intentionally left empty
+     * @param id
+     * @return
+     */
+    @Override
+    public MutableLiveData<Session> getSessionById(int id) {
+        return null;
+    }
+
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Session {
 
-
+    private int id; /* unique identifier created on the client side */
     private String name;
     private Date practicedOnDate;
     private List<Exercise> exercises;
@@ -16,6 +16,7 @@ public class Session {
         this.name = name;
         this.practicedOnDate = practicedOnDate;
         this.exercises = exercises;
+        id = -1;
     }
 
     public String getName() {
@@ -41,5 +42,13 @@ public class Session {
 
     public void setExercises(List<Exercise> exercises) {
         this.exercises = exercises;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

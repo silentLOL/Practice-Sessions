@@ -4,7 +4,6 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +24,7 @@ public class SessionsRepository implements SessionsDataSource {
     private final SessionsDataSource mRemoteSessionsDataSource;
     private Object lock = new Object();
 
-    private Map<String, Session> mCachedSessions;
+    private Map<Integer, Session> mCachedSessions;
     private final MutableLiveData<List<Session>> mSessionLiveData = new MutableLiveData<>();
 
     /**
@@ -81,6 +80,25 @@ public class SessionsRepository implements SessionsDataSource {
         return mSessionLiveData;
     }
 
+    /**
+     * in our Application this method is only called after the
+     * Network call has been done. We assume these data are cached already.
+     * otherwise we fail.
+     *
+     * @param id unique identifier for each session object
+     * @return
+     */
+    @Override
+    public MutableLiveData<Session> getSessionById(int id) {
+        MutableLiveData<Session> returningData = new MutableLiveData<>();
+        if (mCachedSessions == null || mCachedSessions.isEmpty()) {
+            throw new IllegalStateException("The cache is empty or null. Should not be the case!");
+        } else {
+            returningData.setValue(mCachedSessions.get(id));
+        }
+        return returningData;
+    }
+
     //----------------------------------------------//
     // end data requests
     //----------------------------------------------//
@@ -92,25 +110,50 @@ public class SessionsRepository implements SessionsDataSource {
     private void getSessionsFromRemoteDataSource() {
         mRemoteSessionsDataSource.getSessions().observeForever(sessions -> {
             if (sessions != null && !sessions.isEmpty()) {
+                sessions = addIdsToSessions(sessions);
                 cacheSessions(sessions);
                 mSessionLiveData.setValue(sessions);
             }
         });
     }
 
-    private void cacheSessions(List<Session> sessions) {
-        if (mCachedSessions != null) {
-            mCachedSessions.clear();
-        } else {
-            mCachedSessions = new LinkedHashMap<>();
+    /**
+     * adding a client sided unique identifier to be not related on Strings as ids
+     * which could be redundant
+     *
+     * @param sessions
+     * @return
+     */
+    private List<Session> addIdsToSessions(List<Session> sessions) {
+        int i = 0;
+        for (Session currElement : sessions) {
+            currElement.setId(i);
+            i++;
         }
-        cacheSessionsListAsMap(sessions);
-        mCacheIsDirty = false;
+        return sessions;
+    }
+
+    /**
+     * deletes already cached sessions and
+     * and caches the passed in Sessions
+     *
+     * @param sessions
+     */
+    private void cacheSessions(List<Session> sessions) {
+        synchronized (lock) {
+            if (mCachedSessions != null) {
+                mCachedSessions.clear();
+            } else {
+                mCachedSessions = new LinkedHashMap<>();
+            }
+            cacheSessionsListAsMap(sessions);
+            mCacheIsDirty = false;
+        }
     }
 
     private void cacheSessionsListAsMap(List<Session> sessions) {
         for (Session currElement : sessions) {
-            mCachedSessions.put(currElement.getName(), currElement);
+            mCachedSessions.put(currElement.getId(), currElement);
         }
     }
 }

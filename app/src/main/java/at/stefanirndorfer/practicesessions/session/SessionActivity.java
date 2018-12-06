@@ -54,7 +54,7 @@ public class SessionActivity extends AppCompatActivity implements SessionItemAct
 
     private void showSessionDetailFragment(Session session) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        SessionDetailFragment sessionDetailsFragment = SessionDetailFragment.newInstance(session.getName());
+        SessionDetailFragment sessionDetailsFragment = SessionDetailFragment.newInstance(session.getId());
         fragmentManager.beginTransaction()
                 .replace(R.id.sessions_fragment_container, sessionDetailsFragment)
                 .addToBackStack(sessionDetailsFragment.getClass().getCanonicalName())

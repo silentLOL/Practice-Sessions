@@ -9,4 +9,6 @@ import at.stefanirndorfer.practicesessions.data.Session;
 public interface SessionsDataSource {
 
     MutableLiveData<List<Session>> getSessions();
+
+    MutableLiveData<Session> getSessionById(int id);
 }

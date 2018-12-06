@@ -24,7 +24,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_left"
             android:layout_marginLeft="@dimen/margin_left"
-            android:text="@{exercise.getName()}"
             tools:text="@string/exercise_name_example" />
 
 
@@ -47,7 +46,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_left"
                 android:layout_marginLeft="@dimen/margin_left"
-                android:text="@{exercise.getExerciseId()}"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="12sp"
                 android:textStyle="italic"
@@ -59,9 +57,9 @@
                 android:text="@string/detected_bpm_text" />
 
             <TextView
+                android:id="@+id/praticed_at_bpm_tv"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{exercise.getPracticedAtBpm()}" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <View
