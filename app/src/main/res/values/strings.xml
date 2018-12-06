@@ -5,4 +5,10 @@
     <string name="practiced_on_label_text">Practiced on:</string>
     <string name="no_connection_error_text">No Network available! Establish a connection and retry</string>
     <string name="retry_bt_text">Retry</string>
+    <string name="default_session_name_value">Introductory Session</string>
+    <string name="session_name_example">Session Name</string>
+    <string name="example_text_exercise_id">Exercise Id</string>
+    <string name="exercise_id_label">Id:</string>
+    <string name="exercise_name_example">Exercise Name</string>
+    <string name="detected_bpm_text">Practiced at Bpm: </string>
 </resources>

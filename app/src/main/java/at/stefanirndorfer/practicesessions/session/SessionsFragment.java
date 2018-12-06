@@ -1,18 +1,20 @@
 package at.stefanirndorfer.practicesessions.session;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import at.stefanirndorfer.practicesessions.databinding.FragmentSessionsListBinding;
+import at.stefanirndorfer.practicesessions.session.input.SessionItemActionListener;
 import at.stefanirndorfer.practicesessions.util.ViewModelFactory;
 import timber.log.Timber;
 
@@ -23,18 +25,30 @@ public class SessionsFragment extends Fragment {
     private RecyclerView mRecyclerViewSessions;
     private LinearLayoutManager mLayoutManager;
     private SessionsRecyclerViewAdapter mAdapter;
+    private SessionItemActionListener mListener;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = FragmentSessionsListBinding.inflate(inflater, container, false);
         Timber.d("onCreateView");
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false); /* there is nowhere to go to from this fragment */
         mViewModel = obtainViewModel((SessionActivity) this.getActivity());
         mBinding.setViewModel(mViewModel);
         mViewModel.start();
         return mBinding.getRoot();
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mListener = (SessionItemActionListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement SessionItemActionListener");
+        }
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -49,7 +63,7 @@ public class SessionsFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(this.getActivity());
         mRecyclerViewSessions.setLayoutManager(mLayoutManager);
         mRecyclerViewSessions.setHasFixedSize(true);
-        mAdapter = new SessionsRecyclerViewAdapter(mViewModel);
+        mAdapter = new SessionsRecyclerViewAdapter(mViewModel, mListener);
         mRecyclerViewSessions.setAdapter(mAdapter);
     }
 

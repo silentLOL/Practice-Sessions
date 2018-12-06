@@ -2,17 +2,8 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <FrameLayout
+        android:id="@+id/sessions_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <!-- The static MainListFragment -->
-        <fragment
-            android:id="@+id/sessions_list_fragment"
-            android:name="at.stefanirndorfer.practicesessions.session.SessionsFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </FrameLayout>
-
+        android:layout_height="match_parent" />
 
 </layout>
