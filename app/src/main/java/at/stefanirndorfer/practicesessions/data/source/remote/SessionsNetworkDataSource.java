@@ -5,8 +5,8 @@ import android.arch.lifecycle.MutableLiveData;
 import java.util.Collections;
 import java.util.List;
 
+import at.stefanirndorfer.practicesessions.data.ExerciseItemWrapper;
 import at.stefanirndorfer.practicesessions.data.Session;
-import at.stefanirndorfer.practicesessions.data.SessionRelatedExercise;
 import at.stefanirndorfer.practicesessions.data.source.SessionsDataSource;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -78,7 +78,7 @@ public class SessionsNetworkDataSource implements SessionsDataSource {
      * @return
      */
     @Override
-    public MutableLiveData<List<SessionRelatedExercise>> getSortedExercises() {
+    public MutableLiveData<List<ExerciseItemWrapper>> getSortedExercises() {
         return null;
     }
 

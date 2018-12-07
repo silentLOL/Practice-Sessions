@@ -4,8 +4,8 @@ import android.arch.lifecycle.MutableLiveData;
 
 import java.util.List;
 
+import at.stefanirndorfer.practicesessions.data.ExerciseItemWrapper;
 import at.stefanirndorfer.practicesessions.data.Session;
-import at.stefanirndorfer.practicesessions.data.SessionRelatedExercise;
 
 public interface SessionsDataSource {
 
@@ -13,5 +13,5 @@ public interface SessionsDataSource {
 
     MutableLiveData<Session> getSessionById(int id);
 
-    MutableLiveData<List<SessionRelatedExercise>> getSortedExercises();
+    MutableLiveData<List<ExerciseItemWrapper>> getSortedExercises();
 }
