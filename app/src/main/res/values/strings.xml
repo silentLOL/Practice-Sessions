@@ -10,5 +10,6 @@
     <string name="example_text_exercise_id">Exercise Id</string>
     <string name="exercise_id_label">Id:</string>
     <string name="exercise_name_example">Exercise Name</string>
-    <string name="detected_bpm_text">Practiced at Bpm: </string>
+    <string name="detected_bpm_text">Bpm: </string>
+    <string name="top_text">TOP</string>
 </resources>

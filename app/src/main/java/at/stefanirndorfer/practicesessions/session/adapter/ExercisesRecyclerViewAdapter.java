@@ -106,7 +106,7 @@ public class ExercisesRecyclerViewAdapter extends RecyclerView.Adapter<Exercises
         public void bind(SessionRelatedExercise itemData) {
             Timber.d("Binding  exercise item");
 
-            binding.setExercise(itemData.getExercise());
+            binding.setSessionRelatedExercise(itemData);
         }
     }
 

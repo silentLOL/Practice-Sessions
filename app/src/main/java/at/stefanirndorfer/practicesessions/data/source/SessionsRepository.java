@@ -15,6 +15,7 @@ import at.stefanirndorfer.practicesessions.data.Exercise;
 import at.stefanirndorfer.practicesessions.data.Session;
 import at.stefanirndorfer.practicesessions.data.SessionRelatedExercise;
 import at.stefanirndorfer.practicesessions.util.AppExecutors;
+import at.stefanirndorfer.practicesessions.util.SessionsUtils;
 import timber.log.Timber;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -105,12 +106,9 @@ public class SessionsRepository implements SessionsDataSource {
         MutableLiveData<List<SessionRelatedExercise>> returningData = new MutableLiveData<>();
         if (mCachedSessions == null || mCachedSessions.isEmpty()) {
             // we need to do our network request first
-            getSessions().observeForever(new Observer<List<Session>>() {
-                @Override
-                public void onChanged(@Nullable List<Session> sessions) {
-                    if (sessions != null && !sessions.isEmpty()) {
-                        generateSortedExerciseList(returningData);
-                    }
+            getSessions().observeForever(sessions -> {
+                if (sessions != null && !sessions.isEmpty()) {
+                    generateSortedExerciseList(returningData);
                 }
             });
         } else {
@@ -127,10 +125,11 @@ public class SessionsRepository implements SessionsDataSource {
      * to allow subscriptions on any occuring errors
      * it will act like a broadcast and must be associated on the consumer side
      * to an individual call.
+     *
      * @return
      */
-    public MutableLiveData<Throwable> getErrors(){
-        return  mErrors;
+    public MutableLiveData<Throwable> getErrors() {
+        return mErrors;
     }
 
 
@@ -149,6 +148,8 @@ public class SessionsRepository implements SessionsDataSource {
 
     private List<SessionRelatedExercise> convertSessionsToSessionRelatedExercises(List<Session> sessions) {
         List<SessionRelatedExercise> exercises = new ArrayList<>();
+        int topPerformance = -1;
+        int previousPerformance = -1;
         for (Session currSession : sessions) {
 
             SessionRelatedExercise sessionItemData = new SessionRelatedExercise.Builder()
@@ -160,10 +161,24 @@ public class SessionsRepository implements SessionsDataSource {
 
             List<Exercise> oldExercises = currSession.getExercises();
             for (int i = 0; i < oldExercises.size(); i++) {
+                boolean isTopPerformance = false;
+                Exercise currExercise = oldExercises.get(i);
+                Integer practicePerformance = null;
+                if (previousPerformance > 0) {
+                    practicePerformance = SessionsUtils.calculatePracticePerformance(previousPerformance, currExercise.getPracticedAtBpm());
+                    if (practicePerformance > topPerformance) {
+                        topPerformance = practicePerformance;
+                        isTopPerformance = true;
+                    }
+                }
+
+                previousPerformance = currExercise.getPracticedAtBpm();
 
                 SessionRelatedExercise exerciseItemData
                         = new SessionRelatedExercise.Builder()
                         .setItemType(SessionRelatedExercise.ItemType.Exercise)
+                        .setPracticePerformance(practicePerformance)
+                        .setIsTopPerformance(isTopPerformance)
                         .setExercise(oldExercises.get(i))
                         .build();
                 exercises.add(exerciseItemData);
@@ -175,6 +190,7 @@ public class SessionsRepository implements SessionsDataSource {
         }
         return exercises;
     }
+
 
     /**
      * sorts a list of Session objects

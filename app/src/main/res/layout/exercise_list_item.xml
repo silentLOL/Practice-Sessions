@@ -4,9 +4,11 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
-            name="exercise"
-            type="at.stefanirndorfer.practicesessions.data.Exercise" />
+            name="sessionRelatedExercise"
+            type="at.stefanirndorfer.practicesessions.data.SessionRelatedExercise" />
 
     </data>
 
@@ -29,7 +31,7 @@
                 android:id="@+id/exercise_name_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{exercise.getName()}"
+                android:text="@{sessionRelatedExercise.exercise.getName()}"
                 tools:text="@string/exercise_name_example" />
 
             <TextView
@@ -46,10 +48,28 @@
                 android:id="@+id/praticed_at_bpm_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{String.valueOf(exercise.getPracticedAtBpm())}"
+                android:text="@{String.valueOf(sessionRelatedExercise.exercise.getPracticedAtBpm())}"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="12sp"
                 android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/performance_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_vertical_32dp"
+                android:layout_marginLeft="@dimen/margin_vertical_32dp"
+                android:text="@{String.valueOf(sessionRelatedExercise.getPracticePerformance())}" />
+
+            <TextView
+                android:id="@+id/top_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_vertical_32dp"
+                android:layout_marginLeft="@dimen/margin_vertical_32dp"
+                android:text="@string/top_text"
+                android:textColor="@color/colorAccent"
+                android:visibility="@{sessionRelatedExercise.topPerformance ? View.VISIBLE : View.GONE}" />
         </LinearLayout>
         <!-- end exercise data -->
 
