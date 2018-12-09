@@ -30,6 +30,17 @@
             android:layout_marginStart="@dimen/margin_left"
             android:layout_marginLeft="@dimen/margin_left"
             android:layout_marginTop="@dimen/margin_top_32dp"
+            android:text="@{viewModel.mErrorMessage}"
+            android:textColor="@color/colorAccent"
+            android:visibility="@{viewModel.mIsError ? View.VISIBLE : View.GONE}" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_left"
+            android:layout_marginLeft="@dimen/margin_left"
+            android:layout_marginTop="@dimen/margin_top_32dp"
             android:text="@string/no_connection_error_text"
             android:textColor="@color/colorAccent"
             android:visibility="@{viewModel.mNetworkAvailable ? View.GONE : View.VISIBLE}" />

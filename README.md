@@ -1,5 +1,16 @@
 # Practice-Sessions
 
+
+
+<b>Step 2:</b>
+
+Features:
+* RecyclerView with multipe Item types
+* Error handling via Live Data
+
+
+<b>Step 1:</b>
+
 Features:
 * MVVM Architecture with scaleable Repository (e.g. to add a local data source), Live Data and AndroidViewModel implementations
 * Basis for a flexible layout by using Fragments

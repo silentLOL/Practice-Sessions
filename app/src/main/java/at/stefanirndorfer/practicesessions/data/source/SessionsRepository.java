@@ -33,6 +33,7 @@ public class SessionsRepository implements SessionsDataSource {
 
     private Map<Integer, Session> mCachedSessions;
     private final MutableLiveData<List<Session>> mSessionLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Throwable> mErrors = new MutableLiveData<>();
 
     /**
      * Marks the cache as invalid, to force an update the next time data is requested. This variable
@@ -44,6 +45,16 @@ public class SessionsRepository implements SessionsDataSource {
     private SessionsRepository(@NonNull SessionsDataSource remoteSessionsDataSource, AppExecutors executors) {
         mRemoteSessionsDataSource = checkNotNull(remoteSessionsDataSource); /* lets fail hard in case its null */
         mExecutors = executors;
+        subscribeOnErrors();
+    }
+
+    private void subscribeOnErrors() {
+        mRemoteSessionsDataSource.getErrors().observeForever(new Observer<Throwable>() {
+            @Override
+            public void onChanged(@Nullable Throwable throwable) {
+                mErrors.setValue(throwable);
+            }
+        });
     }
 
     /**
@@ -88,24 +99,6 @@ public class SessionsRepository implements SessionsDataSource {
         return mSessionLiveData;
     }
 
-    /**
-     * in our Application this method is only called after the
-     * Network call has been done. We assume these data are cached already.
-     * otherwise we fail.
-     *
-     * @param id unique identifier for each session object
-     * @return
-     */
-    @Override
-    public MutableLiveData<Session> getSessionById(int id) {
-        MutableLiveData<Session> returningData = new MutableLiveData<>();
-        if (mCachedSessions == null || mCachedSessions.isEmpty()) {
-            throw new IllegalStateException("The cache is empty or null. Should not be the case!");
-        } else {
-            returningData.setValue(mCachedSessions.get(id));
-        }
-        return returningData;
-    }
 
     @Override
     public MutableLiveData<List<SessionRelatedExercise>> getSortedExercises() {
@@ -125,6 +118,21 @@ public class SessionsRepository implements SessionsDataSource {
         }
         return returningData;
     }
+
+    //----------------------------------------------//
+    // end data requests
+    //----------------------------------------------//
+
+    /**
+     * to allow subscriptions on any occuring errors
+     * it will act like a broadcast and must be associated on the consumer side
+     * to an individual call.
+     * @return
+     */
+    public MutableLiveData<Throwable> getErrors(){
+        return  mErrors;
+    }
+
 
     private void generateSortedExerciseList(MutableLiveData<List<SessionRelatedExercise>> returningData) {
         //lets do it on a background thread
@@ -168,8 +176,16 @@ public class SessionsRepository implements SessionsDataSource {
         return exercises;
     }
 
+    /**
+     * sorts a list of Session objects
+     * by their PracticedOnDate. Latest first
+     *
+     * @param sessions
+     * @return
+     */
     private List<Session> sortSessionByPracticeDate(List<Session> sessions) {
         Collections.sort(sessions, (o1, o2) -> o1.getPracticedOnDate().compareTo(o2.getPracticedOnDate()));
+        Collections.reverse(sessions);
         return sessions;
     }
 
@@ -187,10 +203,6 @@ public class SessionsRepository implements SessionsDataSource {
             }
         });
     }
-
-    //----------------------------------------------//
-    // end data requests
-    //----------------------------------------------//
 
 
     /**

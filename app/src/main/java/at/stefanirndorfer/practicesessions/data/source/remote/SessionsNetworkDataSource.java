@@ -16,6 +16,7 @@ import timber.log.Timber;
 public class SessionsNetworkDataSource implements SessionsDataSource {
 
     private static SessionsNetworkDataSource instance;
+    private MutableLiveData<Throwable> mErrors = new MutableLiveData<>();
 
     private SessionsNetworkDataSource() {
         /* intentionally left empty */
@@ -56,20 +57,10 @@ public class SessionsNetworkDataSource implements SessionsDataSource {
             public void onFailure(Call<List<Session>> call, Throwable t) {
                 Timber.e("Error calling for sessions: " + t.getMessage());
                 returningData.setValue(Collections.<Session>emptyList());
+                mErrors.setValue(t);
             }
         });
         return returningData;
-    }
-
-    /**
-     * intentionally left empty
-     *
-     * @param id
-     * @return
-     */
-    @Override
-    public MutableLiveData<Session> getSessionById(int id) {
-        return null;
     }
 
     /**
@@ -82,4 +73,8 @@ public class SessionsNetworkDataSource implements SessionsDataSource {
         return null;
     }
 
+    @Override
+    public MutableLiveData<Throwable> getErrors() {
+        return mErrors;
+    }
 }
