@@ -6,6 +6,7 @@
 
 Features:
 * RecyclerView with multipe Item types
+* Sorting by SessionDate in the SessionRepository class
 * Error handling via Live Data
 
 
