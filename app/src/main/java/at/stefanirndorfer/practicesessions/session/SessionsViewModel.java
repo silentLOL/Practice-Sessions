@@ -3,15 +3,13 @@ package at.stefanirndorfer.practicesessions.session;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.databinding.ObservableBoolean;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.util.List;
 
-import at.stefanirndorfer.practicesessions.data.Session;
+import at.stefanirndorfer.practicesessions.data.SessionRelatedExercise;
 import at.stefanirndorfer.practicesessions.data.source.SessionsRepository;
 import at.stefanirndorfer.practicesessions.util.NetworkUtils;
 import timber.log.Timber;
@@ -23,7 +21,7 @@ public class SessionsViewModel extends AndroidViewModel {
 
     private final SessionsRepository mSessionsRepository;
     private final Context mContext;
-    private MutableLiveData<List<Session>> mSessions = new MutableLiveData<>();
+    private MutableLiveData<List<SessionRelatedExercise>> mSessionRelatedExercises = new MutableLiveData<>();
 
     public SessionsViewModel(@NonNull Application application, SessionsRepository repository) {
         super(application);
@@ -39,29 +37,29 @@ public class SessionsViewModel extends AndroidViewModel {
         if (NetworkUtils.isNetworkAvailable(mContext)) {
             mNetworkAvailable.set(true);
             Timber.d("Requesting session data from data source.");
-            loadSessions(true);
+            loaedSessionData(true);
         } else {
             mNetworkAvailable.set(false);
         }
     }
 
-    private void loadSessions(boolean showLoadingUI) {
+    private void loaedSessionData(boolean showLoadingUI) {
         if (showLoadingUI) {
             mDataLoading.set(true);
         }
-        mSessionsRepository.getSessions().observeForever(sessions -> {
-            Timber.d("received " + sessions.size() + " sessions from repository");
-            mSessions.setValue(sessions);
+        mSessionsRepository.getSortedExercises().observeForever(sessionRelatedExercises -> {
+            Timber.d("received " + sessionRelatedExercises.size() + " sessions from repository");
+            mSessionRelatedExercises.setValue(sessionRelatedExercises);
             mDataLoading.set(false);
         });
     }
 
-    public MutableLiveData<List<Session>> getSessions() {
-        return mSessions;
+    public MutableLiveData<List<SessionRelatedExercise>> getSessionRelatedExercises() {
+        return mSessionRelatedExercises;
     }
 
 
-    public void onRetryButtonClicked(){
+    public void onRetryButtonClicked() {
         start();
     }
 }

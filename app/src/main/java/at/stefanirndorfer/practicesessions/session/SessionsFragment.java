@@ -1,7 +1,6 @@
 package at.stefanirndorfer.practicesessions.session;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import at.stefanirndorfer.practicesessions.databinding.FragmentSessionsListBinding;
-import at.stefanirndorfer.practicesessions.session.adapter.SessionsRecyclerViewAdapter;
+import at.stefanirndorfer.practicesessions.session.adapter.ExercisesRecyclerViewAdapter;
 import at.stefanirndorfer.practicesessions.util.ViewModelFactory;
 import timber.log.Timber;
 
@@ -24,7 +23,7 @@ public class SessionsFragment extends Fragment {
     private SessionsViewModel mViewModel;
     private RecyclerView mRecyclerViewSessions;
     private LinearLayoutManager mLayoutManager;
-    private SessionsRecyclerViewAdapter mAdapter;
+    private ExercisesRecyclerViewAdapter mAdapter;
 
     @Nullable
     @Override
@@ -52,7 +51,7 @@ public class SessionsFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(this.getActivity());
         mRecyclerViewSessions.setLayoutManager(mLayoutManager);
         mRecyclerViewSessions.setHasFixedSize(true);
-        mAdapter = new SessionsRecyclerViewAdapter(mViewModel);
+        mAdapter = new ExercisesRecyclerViewAdapter(mViewModel);
         mRecyclerViewSessions.setAdapter(mAdapter);
     }
 
@@ -67,6 +66,6 @@ public class SessionsFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mViewModel.getSessions().removeObservers(this);
+        mViewModel.getSessionRelatedExercises().removeObservers(this);
     }
 }

@@ -6,4 +6,5 @@
     <dimen name="margin_top_16dp">16dp</dimen>
     <dimen name="default_session_id_value">1</dimen>
     <dimen name="margin_vertical_32dp">32dp</dimen>
+    <dimen name="margin_left_8dp">8dp</dimen>
 </resources>

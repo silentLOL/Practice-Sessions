@@ -49,8 +49,6 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
         if (modelClass.isAssignableFrom(SessionsViewModel.class)) {
             //noinspection unchecked
             return (T) new SessionsViewModel(mApplication, mSessionsRepository);
-        } else if (modelClass.isAssignableFrom(SessionDetailViewModel.class)){
-            return (T) new SessionDetailViewModel(mApplication, mSessionsRepository);
         }
         throw new IllegalArgumentException("Unknown ViewModel class: " + modelClass.getName());
     }

@@ -12,10 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 import at.stefanirndorfer.practicesessions.data.Exercise;
-import at.stefanirndorfer.practicesessions.data.ExerciseItemWrapper;
-import at.stefanirndorfer.practicesessions.data.ExerciseWrapper;
 import at.stefanirndorfer.practicesessions.data.Session;
-import at.stefanirndorfer.practicesessions.data.SessionInformationWrapper;
+import at.stefanirndorfer.practicesessions.data.SessionRelatedExercise;
 import at.stefanirndorfer.practicesessions.util.AppExecutors;
 import timber.log.Timber;
 
@@ -110,8 +108,8 @@ public class SessionsRepository implements SessionsDataSource {
     }
 
     @Override
-    public MutableLiveData<List<ExerciseItemWrapper>> getSortedExercises() {
-        MutableLiveData<List<ExerciseItemWrapper>> returningData = new MutableLiveData<>();
+    public MutableLiveData<List<SessionRelatedExercise>> getSortedExercises() {
+        MutableLiveData<List<SessionRelatedExercise>> returningData = new MutableLiveData<>();
         if (mCachedSessions == null || mCachedSessions.isEmpty()) {
             // we need to do our network request first
             getSessions().observeForever(new Observer<List<Session>>() {
@@ -128,7 +126,7 @@ public class SessionsRepository implements SessionsDataSource {
         return returningData;
     }
 
-    private void generateSortedExerciseList(MutableLiveData<List<ExerciseItemWrapper>> returningData) {
+    private void generateSortedExerciseList(MutableLiveData<List<SessionRelatedExercise>> returningData) {
         //lets do it on a background thread
         mExecutors.diskIO().execute(() -> {
             List<Session> sessions = new ArrayList<>();
@@ -136,21 +134,38 @@ public class SessionsRepository implements SessionsDataSource {
                 sessions.add(currElement);
             }
             sessions = sortSessionByPracticeDate(sessions);
-            List<ExerciseItemWrapper> exerciseItemWrappers = convertSessionsToSessionRelatedExercises(sessions);
-            returningData.postValue(exerciseItemWrappers); /* use post value since we are not on the main thread */
+            List<SessionRelatedExercise> sessionRelatedExercises = convertSessionsToSessionRelatedExercises(sessions);
+            returningData.postValue(sessionRelatedExercises); /* use post value since we are not on the main thread */
         });
     }
 
-    private List<ExerciseItemWrapper> convertSessionsToSessionRelatedExercises(List<Session> sessions) {
-        List<ExerciseItemWrapper> exerciseItemWrappers = new ArrayList<>();
+    private List<SessionRelatedExercise> convertSessionsToSessionRelatedExercises(List<Session> sessions) {
+        List<SessionRelatedExercise> exercises = new ArrayList<>();
         for (Session currSession : sessions) {
-            exerciseItemWrappers.add(new SessionInformationWrapper(currSession.getName()));
-            List<Exercise> exerciseList = currSession.getExercises();
-            for (int i = 0; i < exerciseList.size(); i++) {
-                exerciseItemWrappers.add(new ExerciseWrapper(exerciseList.get(i)));
+
+            SessionRelatedExercise sessionItemData = new SessionRelatedExercise.Builder()
+                    .setSessionName(currSession.getName())
+                    .setItemType(SessionRelatedExercise.ItemType.Session)
+                    .setPracticedOnDate(currSession.getPracticedOnDateAsString())
+                    .build();
+            exercises.add(sessionItemData);
+
+            List<Exercise> oldExercises = currSession.getExercises();
+            for (int i = 0; i < oldExercises.size(); i++) {
+
+                SessionRelatedExercise exerciseItemData
+                        = new SessionRelatedExercise.Builder()
+                        .setItemType(SessionRelatedExercise.ItemType.Exercise)
+                        .setExercise(oldExercises.get(i))
+                        .build();
+                exercises.add(exerciseItemData);
             }
+            SessionRelatedExercise seperatorItemData = new SessionRelatedExercise.Builder()
+                    .setItemType(SessionRelatedExercise.ItemType.Seperator)
+                    .build();
+            exercises.add(seperatorItemData);
         }
-        return exerciseItemWrappers;
+        return exercises;
     }
 
     private List<Session> sortSessionByPracticeDate(List<Session> sessions) {

@@ -5,13 +5,14 @@
     <data>
 
         <variable
-            name="sessionInformationWrapper"
-            type="at.stefanirndorfer.practicesessions.data.SessionInformationWrapper" />
+            name="SessionRelatedExercise"
+            type="at.stefanirndorfer.practicesessions.data.SessionRelatedExercise" />
     </data>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_top_32dp"
         android:orientation="vertical">
 
 
@@ -24,23 +25,14 @@
 
             <TextView
                 android:id="@+id/session_name_tv"
-                style="@style/Base.TextAppearance.AppCompat.Large"
+                android:paddingBottom="@dimen/margin_top_16dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_left"
-                android:layout_marginLeft="@dimen/margin_left"
-                android:text="@{sessionInformationWrapper.getSessionName()}"
+                android:layout_marginStart="@dimen/margin_left_8dp"
+                android:layout_marginLeft="@dimen/margin_left_8dp"
+                android:text="@{SessionRelatedExercise.getSessionName()}"
+                android:textStyle="bold"
                 tools:text="@string/session_name_example" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_left"
-                android:layout_marginLeft="@dimen/margin_left"
-                android:text="@string/practiced_on_label_text"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="12sp"
-                android:textStyle="italic" />
 
             <TextView
                 android:id="@+id/practiced_on_date_tv"
@@ -48,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_left"
                 android:layout_marginLeft="@dimen/margin_left"
-                android:text="@{sessionInformationWrapper.getSessionDate()}"
+                android:text="@{SessionRelatedExercise.getPracticedOnDate()}"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="12sp"
                 android:textStyle="italic"

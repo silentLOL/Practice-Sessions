@@ -1,5 +1,6 @@
 package at.stefanirndorfer.practicesessions.session.adapter;
 
+import android.databinding.ViewDataBinding;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,76 +9,139 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.stefanirndorfer.practicesessions.data.Exercise;
+import at.stefanirndorfer.practicesessions.data.SessionRelatedExercise;
+import at.stefanirndorfer.practicesessions.data.SessionRelatedExercise.ItemType;
 import at.stefanirndorfer.practicesessions.databinding.ExerciseListItemBinding;
+import at.stefanirndorfer.practicesessions.databinding.SeperatorListItemBinding;
+import at.stefanirndorfer.practicesessions.databinding.SessionListItemBinding;
+import at.stefanirndorfer.practicesessions.session.SessionsViewModel;
 import timber.log.Timber;
 
-public class ExercisesRecyclerViewAdapter extends RecyclerView.Adapter<ExercisesRecyclerViewAdapter.ExercisesViewHolder> {
+public class ExercisesRecyclerViewAdapter extends RecyclerView.Adapter<ExercisesRecyclerViewAdapter.ExerciseItemWrapperViewHolder> {
 
 
-    private final SessionDetailViewModel mViewModel;
-    private List<Exercise> mExercises;
+    private final SessionsViewModel mViewModel;
+    private List<SessionRelatedExercise> mItemData;
 
-    public ExercisesRecyclerViewAdapter(SessionDetailViewModel viewModel) {
+    public ExercisesRecyclerViewAdapter(SessionsViewModel viewModel) {
         this.mViewModel = viewModel;
-        mExercises = new ArrayList<>();
-        subscribeOnSessionData();
+        mItemData = new ArrayList<>();
+        subscribeData();
     }
 
-    private void subscribeOnSessionData() {
-        mViewModel.getSession().observeForever(session -> {
-            if (session != null && session.getExercises() != null) {
-                Timber.d("Recieved session object from repository");
-                setExercises(session.getExercises());
+    private void subscribeData() {
+        mViewModel.getSessionRelatedExercises().observeForever(exerciseData -> {
+            if (exerciseData != null && !exerciseData.isEmpty()) {
+                Timber.d("Received data from viewmodel");
+                setData(exerciseData);
             }
         });
     }
 
-    private void setExercises(List<Exercise> exercises) {
-        this.mExercises = exercises;
+    private void setData(List<SessionRelatedExercise> data) {
+        this.mItemData = data;
         notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return mItemData.get(position).getItemType().ordinal();
     }
 
 
     @NonNull
     @Override
-    public ExercisesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        ExerciseListItemBinding binding;
+    public ExerciseItemWrapperViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-        binding = ExerciseListItemBinding.inflate(inflater, viewGroup, false);
-        Exercise currElement = mExercises.get(i);
-        binding.exerciseIdTv.setText(currElement.getExerciseId());
-        binding.exerciseNameTv.setText(currElement.getName());
-        binding.praticedAtBpmTv.setText(String.valueOf(currElement.getPracticedAtBpm()));
-
-
-        return new ExercisesViewHolder(binding);
+        ItemType itemViewType = ItemType.values()[viewType];
+        switch (itemViewType) {
+            case Session:
+                SessionListItemBinding sessionBinding;
+                sessionBinding = SessionListItemBinding.inflate(inflater, viewGroup, false);
+                return new SessionInformationViewHolder(sessionBinding);
+            case Exercise:
+                ExerciseListItemBinding exerciseBinding;
+                exerciseBinding = ExerciseListItemBinding.inflate(inflater, viewGroup, false);
+                return new ExerciseViewHolder(exerciseBinding);
+            case Seperator:
+                SeperatorListItemBinding seperatorBinding;
+                seperatorBinding = SeperatorListItemBinding.inflate(inflater, viewGroup, false);
+                return new SeperatorViewHolder(seperatorBinding);
+            default:
+                throw new IllegalArgumentException("View Type could not be mapped.");
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ExercisesViewHolder exercisesViewHolder, int i) {
-        Exercise exercise = mExercises.get(i);
-        exercisesViewHolder.bind(exercise);
+    public void onBindViewHolder(@NonNull ExerciseItemWrapperViewHolder exerciseItemWrapperViewHolder, int i) {
+        SessionRelatedExercise itemData = mItemData.get(i);
+        exerciseItemWrapperViewHolder.bind(itemData);
     }
 
     @Override
     public int getItemCount() {
-        return mExercises != null ? mExercises.size() : 0;
+        return mItemData != null ? mItemData.size() : 0;
     }
 
-    public class ExercisesViewHolder extends RecyclerView.ViewHolder {
+    public class ExerciseItemWrapperViewHolder extends RecyclerView.ViewHolder {
 
-        private final ExerciseListItemBinding binding;
-
-        public ExercisesViewHolder(@NonNull ExerciseListItemBinding binding) {
+        public ExerciseItemWrapperViewHolder(@NonNull ViewDataBinding binding) {
             super(binding.getRoot());
+        }
+
+        public void bind(SessionRelatedExercise itemData) {
+            // intentionally left blank
+        }
+    }
+
+    public class ExerciseViewHolder extends ExerciseItemWrapperViewHolder {
+        private ExerciseListItemBinding binding;
+
+        public ExerciseViewHolder(@NonNull ExerciseListItemBinding binding) {
+            super(binding);
             this.binding = binding;
         }
 
-        public void bind(Exercise exercise) {
-            Timber.d("Binding exercise instance");
-            binding.setExercise(exercise);
-            binding.executePendingBindings();
+        @Override
+        public void bind(SessionRelatedExercise itemData) {
+            Timber.d("Binding  exercise item");
+
+            binding.setExercise(itemData.getExercise());
+        }
+    }
+
+
+    public class SessionInformationViewHolder extends ExerciseItemWrapperViewHolder {
+        private SessionListItemBinding binding;
+
+        public SessionInformationViewHolder(@NonNull SessionListItemBinding binding) {
+            super(binding);
+            this.binding = binding;
+        }
+
+        @Override
+        public void bind(SessionRelatedExercise itemData) {
+
+            Timber.d("Binding session item");
+            binding.setSessionRelatedExercise(itemData);
+        }
+    }
+
+    public class SeperatorViewHolder extends ExerciseItemWrapperViewHolder {
+
+        private SeperatorListItemBinding binding;
+
+        public SeperatorViewHolder(@NonNull SeperatorListItemBinding binding) {
+            super(binding);
+            this.binding = binding;
+        }
+
+        @Override
+        public void bind(SessionRelatedExercise itemData) {
+            Timber.d("Binding seperator item");
+            // nothing to bind
         }
     }
 }
+
+
