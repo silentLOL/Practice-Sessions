@@ -14,4 +14,6 @@
     <string name="top_text">TOP</string>
     <string name="example_bpm">100</string>
     <string name="performance_label">Perf: </string>
+    <string name="placeholder_img_content_description">placeholder for an exercise image</string>
+    <string name="contentDescription_Exercise_Image">Image repesenting a sepecific exercise</string>
 </resources>

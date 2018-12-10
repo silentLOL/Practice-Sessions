@@ -20,97 +20,137 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+
+        <!-- begin image -->
+        <ProgressBar
+            android:id="@+id/exercise_image_pb"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/exercise_image_iv"
+            app:layout_constraintStart_toStartOf="@+id/exercise_image_iv"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/exercise_placeholder_iv"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/placeholder_img_content_description"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@android:drawable/ic_delete" />
+
+        <ImageView
+            android:id="@+id/exercise_image_iv"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/contentDescription_Exercise_Image"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
+        <!-- end image -->
+
+
         <TextView
             android:id="@+id/exercise_name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="@dimen/margin_vertical"
             android:layout_marginBottom="@dimen/margin_vertical"
             android:text="@{exercise.getName()}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/exercise_image_iv"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.333"
             tools:text="@string/exercise_name_example" />
 
         <TextView
             android:id="@+id/practiced_at_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="164dp"
-            android:layout_marginLeft="164dp"
-            android:layout_marginTop="@dimen/margin_vertical"
-            android:layout_marginBottom="@dimen/margin_vertical"
+            android:layout_marginTop="8dp"
             android:text="@string/detected_bpm_text"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="12sp"
             android:textStyle="italic"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintStart_toStartOf="@+id/exercise_name_tv"
+            app:layout_constraintTop_toBottomOf="@+id/exercise_name_tv" />
 
         <TextView
             android:id="@+id/praticed_at_bpm_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_vertical"
-            android:layout_marginBottom="@dimen/margin_vertical"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
             android:text="@{String.valueOf(exercise.getPracticedAtBpm())}"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="12sp"
             android:textStyle="italic"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/practiced_at_label"
             app:layout_constraintStart_toEndOf="@+id/practiced_at_label"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintTop_toTopOf="@+id/practiced_at_label"
             tools:text="@string/example_bpm" />
 
         <TextView
             android:id="@+id/performance_at_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="220dp"
-            android:layout_marginLeft="220dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginStart="64dp"
+            android:layout_marginLeft="64dp"
             android:text="@string/performance_label"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="12sp"
             android:textStyle="italic"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintBottom_toBottomOf="@+id/practiced_at_label"
+            app:layout_constraintStart_toEndOf="@+id/practiced_at_label"
+            app:layout_constraintTop_toTopOf="@+id/practiced_at_label"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/performance_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
             android:text="@{String.valueOf(exercise.getPracticePerformance())}"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="12sp"
             android:textStyle="italic"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/performance_at_label"
             app:layout_constraintStart_toEndOf="@+id/performance_at_label"
+            app:layout_constraintTop_toTopOf="@+id/performance_at_label"
             tools:text="@string/example_bpm" />
 
         <TextView
             android:id="@+id/top_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_vertical"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="@dimen/margin_vertical"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:text="@string/top_text"
             android:textColor="@color/colorAccent"
             android:visibility="@{exercise.isTopPerformance() ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/performance_tv"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/performance_tv"
             tools:visibility="visible" />
     </android.support.constraint.ConstraintLayout>
     <!-- end exercise data -->

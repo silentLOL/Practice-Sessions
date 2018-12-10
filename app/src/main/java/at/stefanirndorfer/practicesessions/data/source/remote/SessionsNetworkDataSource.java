@@ -1,6 +1,10 @@
 package at.stefanirndorfer.practicesessions.data.source.remote;
 
 import android.arch.lifecycle.MutableLiveData;
+import android.content.Context;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
 import java.util.List;
@@ -76,5 +80,12 @@ public class SessionsNetworkDataSource implements SessionsDataSource {
     @Override
     public MutableLiveData<Throwable> getErrors() {
         return mErrors;
+    }
+
+    @Override
+    public void loadImageIntoView(Context context, ImageView target, String imageUrl, com.squareup.picasso.Callback callback) {
+        Picasso.with(context)
+                .load(imageUrl)
+                .into(target, callback);
     }
 }

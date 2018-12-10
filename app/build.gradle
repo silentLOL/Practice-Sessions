@@ -40,6 +40,10 @@ dependencies {
     // timber
     implementation "com.jakewharton.timber:timber:$rootProject.timberVersion"
 
+    // picasso
+    implementation "com.squareup.picasso:picasso:$rootProject.picassoVersion"
+    implementation "com.jakewharton.picasso:picasso2-okhttp3-downloader:$rootProject.picassoDownloaderVersion"
+
     // butter knife
     implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"

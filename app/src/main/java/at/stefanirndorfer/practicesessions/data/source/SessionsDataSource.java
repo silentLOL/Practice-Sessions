@@ -1,6 +1,10 @@
 package at.stefanirndorfer.practicesessions.data.source;
 
 import android.arch.lifecycle.MutableLiveData;
+import android.content.Context;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Callback;
 
 import java.util.List;
 
@@ -32,4 +36,14 @@ public interface SessionsDataSource {
      * @return
      */
     public MutableLiveData<Throwable> getErrors();
+
+    /**
+     * populates the given target view with an image requested with the given url string
+     * reports success and error to the given callback
+     * @param context
+     * @param target
+     * @param imageUrl
+     * @param callback
+     */
+    void loadImageIntoView(Context context, ImageView target, String imageUrl, Callback callback);
 }

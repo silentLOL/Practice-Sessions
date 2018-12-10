@@ -10,6 +10,9 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Callback;
 
 import java.util.List;
 
@@ -94,4 +97,7 @@ public class SessionsViewModel extends AndroidViewModel {
         mIsError.set(false);
     }
 
+    public void loadExerciseImage(ImageView target, String imageUrl, Callback callback) {
+        mSessionsRepository.loadImageIntoView(mContext, target, imageUrl, callback);
+    }
 }

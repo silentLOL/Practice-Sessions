@@ -2,8 +2,12 @@ package at.stefanirndorfer.practicesessions.data.source;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Callback;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -114,6 +118,10 @@ public class SessionsRepository implements SessionsDataSource {
             generateSortedExerciseList(returningData);
         }
         return returningData;
+    }
+
+    public void loadImageIntoView(Context context, ImageView target, String imageUrl, Callback callback) {
+        mRemoteSessionsDataSource.loadImageIntoView(context, target, imageUrl, callback);
     }
 
     //----------------------------------------------//
@@ -241,4 +249,5 @@ public class SessionsRepository implements SessionsDataSource {
             mCachedSessions.put(currElement.getId(), currElement);
         }
     }
+
 }

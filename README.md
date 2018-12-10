@@ -1,14 +1,13 @@
 # Practice-Sessions
 
 
-
 <b>Step 3:</b>
-
+* Calculation of each exercise's performance with respect to the previous sessions average performance
 
 <b>Step 2:</b>
 
 Features:
-* RecyclerView with multipe Item types
+* RecyclerView with multiple Item types
 * Sorting by SessionDate in the SessionRepository class
 * Error handling via Live Data
 

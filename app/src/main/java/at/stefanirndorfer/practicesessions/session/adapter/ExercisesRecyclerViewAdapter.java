@@ -4,7 +4,10 @@ import android.databinding.ViewDataBinding;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+
+import com.squareup.picasso.Callback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +18,7 @@ import at.stefanirndorfer.practicesessions.databinding.ExerciseListItemBinding;
 import at.stefanirndorfer.practicesessions.databinding.SeperatorListItemBinding;
 import at.stefanirndorfer.practicesessions.databinding.SessionListItemBinding;
 import at.stefanirndorfer.practicesessions.session.SessionsViewModel;
+import at.stefanirndorfer.practicesessions.util.Constants;
 import timber.log.Timber;
 
 public class ExercisesRecyclerViewAdapter extends RecyclerView.Adapter<ExercisesRecyclerViewAdapter.ExerciseItemWrapperViewHolder> {
@@ -105,6 +109,32 @@ public class ExercisesRecyclerViewAdapter extends RecyclerView.Adapter<Exercises
         @Override
         public void bind(SessionRelatedExercise itemData) {
             Timber.d("Binding  exercise item");
+
+            //requesting image
+            String imageUrl = Constants.EXERCISE_IMAGE_BASE_URL + itemData.getExercise().getExerciseId() + Constants.EXERCISE_IMAGE_FILE_EXTENTION;
+
+            mViewModel.loadExerciseImage(binding.exerciseImageIv, imageUrl,
+                    new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            Timber.d("success loading image for exercise.");
+                            binding.exerciseImageIv.setVisibility(View.VISIBLE);
+                            binding.exercisePlaceholderIv.setVisibility(View.GONE);
+                            binding.exerciseImagePb.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onError() {
+                            Timber.e("Error loading image for exercise.");
+                            binding.exerciseImageIv.setVisibility(View.GONE);
+                            binding.exercisePlaceholderIv.setVisibility(View.VISIBLE);
+                            binding.exerciseImagePb.setVisibility(View.GONE);
+                        }
+                    }
+            );
+            binding.exerciseImagePb.setVisibility(View.VISIBLE);
+
+
 
             binding.setExercise(itemData.getExercise());
         }
