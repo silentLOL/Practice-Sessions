@@ -1,6 +1,10 @@
 # Practice-Sessions
 
 
+<b>Step 4:</b>
+* Added image thumbnails to exercise list items
+
+
 <b>Step 3:</b>
 * Calculation of each exercise's performance with respect to the previous sessions average performance
 
