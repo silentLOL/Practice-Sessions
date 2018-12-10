@@ -9,15 +9,15 @@ import at.stefanirndorfer.practicesessions.data.Session;
 public class SessionsUtils {
 
     /**
-     * @param previousExerciseBPM
+     * @param previousSessionsAverageBPM
      * @param currentExerciseBPM
      * @return practicePerformance as Integer value
      */
-    public static int calculatePracticePerformance(int previousExerciseBPM, int currentExerciseBPM) {
-        if (previousExerciseBPM != 0) { /* that would lead to a division by zero */
-            return (int) (currentExerciseBPM / (previousExerciseBPM / 100f));
+    public static int calculatePracticePerformance(float previousSessionsAverageBPM, int currentExerciseBPM) {
+        if (previousSessionsAverageBPM != 0) { /* that would lead to a division by zero */
+            return (int) (currentExerciseBPM / (previousSessionsAverageBPM / 100f));
         }
-        throw new IllegalArgumentException("previousExerciseBPM is not suppoesed to be 0!");
+        throw new IllegalArgumentException("previousSessionAverageBPM is not suppoesed to be 0!");
     }
 
 
@@ -44,31 +44,32 @@ public class SessionsUtils {
 
     /**
      * iterates over the contained exercises and calculates the practice performance
-     * with respect to the previous exercise.
-     * This works under the assumption that all Exercises are in the correct order already (accordingly to their id)
+     * with respect to the previous session.
      *
      * @param sessions
      */
     public static void calculatePerformances(List<Session> sessions) {
-
         int topPerformance = -1; // init with something too low to be real
-        int previousPerformance = -1;
         List<Exercise> currentSessionsExercises;
-        for (Session currentSession : sessions) {
+        for (int i = 0; i < sessions.size(); i++) {
+            int summBPM = 0; // summ of all exercises practiceBPMs to calculate the average
+
+            Session currentSession = sessions.get(i);
             currentSessionsExercises = currentSession.getExercises();
             for (Exercise currExercise : currentSessionsExercises) {
                 Integer practicePerformance = null;
-                if (previousPerformance > 0) {
-                    practicePerformance = SessionsUtils.calculatePracticePerformance(previousPerformance, currExercise.getPracticedAtBpm());
+                if (i > 0) {
+                    practicePerformance = SessionsUtils.calculatePracticePerformance(sessions.get(i - 1).getAverageBPM(), currExercise.getPracticedAtBpm());
+                    currExercise.setPracticePerformance(practicePerformance);
                     if (practicePerformance > topPerformance) {
                         topPerformance = practicePerformance;
                     }
                 }
-                previousPerformance = currExercise.getPracticedAtBpm();
-                if (practicePerformance != null) {
-                    currExercise.setPracticePerformance(practicePerformance);
-                }
+                // summing up for the average bpm
+                summBPM += currExercise.getPracticedAtBpm();
             }
+            // setting the averageBPM for the current session
+            currentSession.setAverageBPM((float) summBPM / currentSessionsExercises.size());
         }
         flagTopPerformances(sessions, topPerformance);
     }

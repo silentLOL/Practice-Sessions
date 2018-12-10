@@ -11,6 +11,7 @@ public class Session {
     private String name;
     private Date practicedOnDate;
     private List<Exercise> exercises;
+    private float averageBPM;
 
     public Session(String name, Date practicedOnDate, List<Exercise> exercises) {
         this.name = name;
@@ -54,5 +55,13 @@ public class Session {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public float getAverageBPM() {
+        return averageBPM;
+    }
+
+    public void setAverageBPM(float averageBPM) {
+        this.averageBPM = averageBPM;
     }
 }
