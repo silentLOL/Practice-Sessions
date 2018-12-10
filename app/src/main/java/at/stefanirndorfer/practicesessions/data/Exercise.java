@@ -4,6 +4,8 @@ public class Exercise {
     private String exerciseId;
     private String name;
     private Integer practicedAtBpm;
+    private Integer practicePerformance;
+    private boolean isTopPerformance = false; // flag to mark top performances. default false
 
     public Exercise(String exerciseId, String name, Integer practicedAtBpm) {
         this.exerciseId = exerciseId;
@@ -33,5 +35,21 @@ public class Exercise {
 
     public void setPracticedAtBpm(Integer practicedAtBpm) {
         this.practicedAtBpm = practicedAtBpm;
+    }
+
+    public Integer getPracticePerformance() {
+        return practicePerformance;
+    }
+
+    public void setPracticePerformance(Integer practicePerformance) {
+        this.practicePerformance = practicePerformance;
+    }
+
+    public boolean isTopPerformance() {
+        return isTopPerformance;
+    }
+
+    public void setTopPerformance(boolean topPerformance) {
+        isTopPerformance = topPerformance;
     }
 }

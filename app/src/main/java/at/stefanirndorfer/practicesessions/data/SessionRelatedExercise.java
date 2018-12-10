@@ -11,12 +11,10 @@ public class SessionRelatedExercise {
         Session, Exercise, Seperator
     }
 
-    private Integer mPracticePerformance;
     private String mSessionName;
     private Exercise mExercise;
     private String mPracticedOnDate;
     private ItemType mItemType;
-    private boolean mIsTopPerformance; /* to avoid a static variable */
 
 
     private SessionRelatedExercise() {
@@ -27,8 +25,6 @@ public class SessionRelatedExercise {
         private Exercise mExercise;
         private ItemType mItemType;
         private String mPracticedOnDate;
-        private Integer mPracticePerformance;
-        private boolean mIsTopPerformance; /* to avoid a static variable */
 
         public Builder setItemType(ItemType itemType) {
             this.mItemType = itemType;
@@ -50,47 +46,16 @@ public class SessionRelatedExercise {
             return this;
         }
 
-        public Builder setPracticePerformance(Integer practicePerformance) {
-            this.mPracticePerformance = practicePerformance;
-            return this;
-        }
-
-        public Builder setIsTopPerformance(boolean mIsTopPerformance) {
-            this.mIsTopPerformance = mIsTopPerformance;
-            return this;
-        }
-
         public SessionRelatedExercise build() {
             SessionRelatedExercise sessionRelatedExercise = new SessionRelatedExercise();
             sessionRelatedExercise.setExercise(mExercise);
             sessionRelatedExercise.setSessionName(mSessionName);
             sessionRelatedExercise.setItemType(mItemType);
             sessionRelatedExercise.setPracticedOnDate(mPracticedOnDate);
-            sessionRelatedExercise.setPracticePerformance(mPracticePerformance);
-            sessionRelatedExercise.setIsTopPerformance(mIsTopPerformance);
             return sessionRelatedExercise;
         }
-
-
     }
 
-    private void setIsTopPerformance(boolean isTopPerformance) {
-        this.mIsTopPerformance = isTopPerformance;
-    }
-
-    public boolean isTopPerformance() {
-        return mIsTopPerformance;
-    }
-
-    private void setPracticePerformance(Integer practicePerformance) {
-        if (mPracticePerformance != null) {
-            this.mPracticePerformance = practicePerformance;
-        }
-    }
-
-    public Integer getPracticePerformance() {
-        return mPracticePerformance;
-    }
 
     public String getSessionName() {
         return mSessionName;
@@ -99,7 +64,6 @@ public class SessionRelatedExercise {
     public void setSessionName(String mSessionName) {
         this.mSessionName = mSessionName;
     }
-
 
     public Exercise getExercise() {
         return mExercise;

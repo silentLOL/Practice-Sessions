@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -122,7 +121,7 @@ public class SessionsRepository implements SessionsDataSource {
     //----------------------------------------------//
 
     /**
-     * to allow subscriptions on any occuring errors
+     * to allow subscriptions on any occurring errors
      * it will act like a broadcast and must be associated on the consumer side
      * to an individual call.
      *
@@ -137,72 +136,54 @@ public class SessionsRepository implements SessionsDataSource {
         //lets do it on a background thread
         mExecutors.diskIO().execute(() -> {
             List<Session> sessions = new ArrayList<>();
-            for (Session currElement : mCachedSessions.values()) {
-                sessions.add(currElement);
-            }
-            sessions = sortSessionByPracticeDate(sessions);
+            sessions.addAll(mCachedSessions.values());
+            SessionsUtils.sortSessionByPracticeDate(sessions);
+            // now we got the sessions in the right order to calculate the performances
+            SessionsUtils.calculatePerformances(sessions);
+            // now sort them in reverse order (latest session first)
+            SessionsUtils.reverseSessionsList(sessions);
             List<SessionRelatedExercise> sessionRelatedExercises = convertSessionsToSessionRelatedExercises(sessions);
             returningData.postValue(sessionRelatedExercises); /* use post value since we are not on the main thread */
         });
     }
 
-    private List<SessionRelatedExercise> convertSessionsToSessionRelatedExercises(List<Session> sessions) {
-        List<SessionRelatedExercise> exercises = new ArrayList<>();
-        int topPerformance = -1;
-        int previousPerformance = -1;
-        for (Session currSession : sessions) {
-
-            SessionRelatedExercise sessionItemData = new SessionRelatedExercise.Builder()
-                    .setSessionName(currSession.getName())
-                    .setItemType(SessionRelatedExercise.ItemType.Session)
-                    .setPracticedOnDate(currSession.getPracticedOnDateAsString())
-                    .build();
-            exercises.add(sessionItemData);
-
-            List<Exercise> oldExercises = currSession.getExercises();
-            for (int i = 0; i < oldExercises.size(); i++) {
-                boolean isTopPerformance = false;
-                Exercise currExercise = oldExercises.get(i);
-                Integer practicePerformance = null;
-                if (previousPerformance > 0) {
-                    practicePerformance = SessionsUtils.calculatePracticePerformance(previousPerformance, currExercise.getPracticedAtBpm());
-                    if (practicePerformance > topPerformance) {
-                        topPerformance = practicePerformance;
-                        isTopPerformance = true;
-                    }
-                }
-
-                previousPerformance = currExercise.getPracticedAtBpm();
-
-                SessionRelatedExercise exerciseItemData
-                        = new SessionRelatedExercise.Builder()
-                        .setItemType(SessionRelatedExercise.ItemType.Exercise)
-                        .setPracticePerformance(practicePerformance)
-                        .setIsTopPerformance(isTopPerformance)
-                        .setExercise(oldExercises.get(i))
-                        .build();
-                exercises.add(exerciseItemData);
-            }
-            SessionRelatedExercise seperatorItemData = new SessionRelatedExercise.Builder()
-                    .setItemType(SessionRelatedExercise.ItemType.Seperator)
-                    .build();
-            exercises.add(seperatorItemData);
-        }
-        return exercises;
-    }
-
-
     /**
-     * sorts a list of Session objects
-     * by their PracticedOnDate. Latest first
+     * creates the data structure we need to populate the UI
      *
      * @param sessions
      * @return
      */
-    private List<Session> sortSessionByPracticeDate(List<Session> sessions) {
-        Collections.sort(sessions, (o1, o2) -> o1.getPracticedOnDate().compareTo(o2.getPracticedOnDate()));
-        Collections.reverse(sessions);
-        return sessions;
+    private List<SessionRelatedExercise> convertSessionsToSessionRelatedExercises(List<Session> sessions) {
+        List<SessionRelatedExercise> sessionRelatedExercises = new ArrayList<>();
+        for (Session currSession : sessions) {
+            sessionRelatedExercises.add(buildSessionItem(currSession));
+            for (Exercise currExercise : currSession.getExercises()) {
+                sessionRelatedExercises.add(buildExerciseItem(currExercise));
+            }
+            sessionRelatedExercises.add(buildSeperator());
+        }
+        return sessionRelatedExercises;
+    }
+
+    private SessionRelatedExercise buildExerciseItem(Exercise currExercise) {
+        return new SessionRelatedExercise.Builder()
+                .setItemType(SessionRelatedExercise.ItemType.Exercise)
+                .setExercise(currExercise)
+                .build();
+    }
+
+    private SessionRelatedExercise buildSeperator() {
+        return new SessionRelatedExercise.Builder()
+                .setItemType(SessionRelatedExercise.ItemType.Seperator)
+                .build();
+    }
+
+    private SessionRelatedExercise buildSessionItem(Session currSession) {
+        return new SessionRelatedExercise.Builder()
+                .setSessionName(currSession.getName())
+                .setItemType(SessionRelatedExercise.ItemType.Session)
+                .setPracticedOnDate(currSession.getPracticedOnDateAsString())
+                .build();
     }
 
 

@@ -12,4 +12,6 @@
     <string name="exercise_name_example">Exercise Name</string>
     <string name="detected_bpm_text">Bpm: </string>
     <string name="top_text">TOP</string>
+    <string name="example_bpm">100</string>
+    <string name="performance_label">Perf: </string>
 </resources>

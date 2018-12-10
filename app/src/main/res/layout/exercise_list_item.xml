@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -7,72 +8,111 @@
         <import type="android.view.View" />
 
         <variable
-            name="sessionRelatedExercise"
-            type="at.stefanirndorfer.practicesessions.data.SessionRelatedExercise" />
+            name="exercise"
+            type="at.stefanirndorfer.practicesessions.data.Exercise" />
 
     </data>
 
-    <LinearLayout
+
+    <!-- begin exercise data -->
+
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-
-        <!-- begin exercise data -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/exercise_name_tv"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_left"
-            android:layout_marginLeft="@dimen/margin_left"
-            android:orientation="horizontal">
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="@dimen/margin_vertical"
+            android:layout_marginBottom="@dimen/margin_vertical"
+            android:text="@{exercise.getName()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/exercise_name_example" />
 
-            <TextView
-                android:id="@+id/exercise_name_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{sessionRelatedExercise.exercise.getName()}"
-                tools:text="@string/exercise_name_example" />
+        <TextView
+            android:id="@+id/practiced_at_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="164dp"
+            android:layout_marginLeft="164dp"
+            android:layout_marginTop="@dimen/margin_vertical"
+            android:layout_marginBottom="@dimen/margin_vertical"
+            android:text="@string/detected_bpm_text"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="12sp"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_vertical_32dp"
-                android:layout_marginLeft="@dimen/margin_vertical_32dp"
-                android:text="@string/detected_bpm_text"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="12sp"
-                android:textStyle="italic" />
+        <TextView
+            android:id="@+id/praticed_at_bpm_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_vertical"
+            android:layout_marginBottom="@dimen/margin_vertical"
+            android:text="@{String.valueOf(exercise.getPracticedAtBpm())}"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="12sp"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/practiced_at_label"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            tools:text="@string/example_bpm" />
 
-            <TextView
-                android:id="@+id/praticed_at_bpm_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{String.valueOf(sessionRelatedExercise.exercise.getPracticedAtBpm())}"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="12sp"
-                android:textStyle="italic" />
+        <TextView
+            android:id="@+id/performance_at_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="220dp"
+            android:layout_marginLeft="220dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/performance_label"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="12sp"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
 
-            <TextView
-                android:id="@+id/performance_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_vertical_32dp"
-                android:layout_marginLeft="@dimen/margin_vertical_32dp"
-                android:text="@{String.valueOf(sessionRelatedExercise.getPracticePerformance())}" />
+        <TextView
+            android:id="@+id/performance_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:text="@{String.valueOf(exercise.getPracticePerformance())}"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="12sp"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/performance_at_label"
+            tools:text="@string/example_bpm" />
 
-            <TextView
-                android:id="@+id/top_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_vertical_32dp"
-                android:layout_marginLeft="@dimen/margin_vertical_32dp"
-                android:text="@string/top_text"
-                android:textColor="@color/colorAccent"
-                android:visibility="@{sessionRelatedExercise.topPerformance ? View.VISIBLE : View.GONE}" />
-        </LinearLayout>
-        <!-- end exercise data -->
-
-    </LinearLayout>
+        <TextView
+            android:id="@+id/top_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_vertical"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="@dimen/margin_vertical"
+            android:text="@string/top_text"
+            android:textColor="@color/colorAccent"
+            android:visibility="@{exercise.isTopPerformance() ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+    </android.support.constraint.ConstraintLayout>
+    <!-- end exercise data -->
 
 </layout>
